@@ -17,6 +17,7 @@
     "test:frontend": "cd frontend && npm test",
     "test:mobile": "cd mobile && npm test",
 
+    "build": "npm install && npm run build:backend && npm run build:frontend && npm run build:mobile",
     "start-dev": "concurrently -n backend,frontend,mobile -c red,green,blue \"npm run start:backend\" \"npm run start:frontend\" \"npm run start:mobile\""
   },
   "repository": {
