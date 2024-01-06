@@ -1,0 +1,40 @@
+{
+  "name": "pellicola",
+  "version": "1.0.0",
+  "description": "A movie review application",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm start",
+    "start:mobile": "cd mobile && npm start",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "build:mobile": "cd mobile && npm run build",
+    "test:backend": "cd backend && npm test",
+    "test:frontend": "cd frontend && npm test",
+    "test:mobile": "cd mobile && npm test",
+
+    "start": "npm run start:backend & npm run start:frontend & npm run start:mobile"
+  }
+  ,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TulioHRC/pellicola.git"
+  },
+  "keywords": [
+    "web",
+    "fullstack",
+    "frontend",
+    "backend",
+    "mobile"
+  ],
+  "author": "Tulio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TulioHRC/pellicola/issues"
+  },
+  "homepage": "https://github.com/TulioHRC/pellicola#readme"
+}
