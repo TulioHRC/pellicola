@@ -8,8 +8,6 @@ function App() {
             try {
                 const data = await fetch('/api');
 
-                //console.log(data);
-
                 if (data.ok) {
                     setMessage(await data.json());
                 } else {
