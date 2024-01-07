@@ -1,30 +1,21 @@
 import React, { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import MainPage from './Components/MainPage';
+import LibraryPage from './Components/LibraryPage';
+
 
 function App() {
-    const [message, setMessage] = useState('');
-
-    useEffect(() => {
-        const testData = async () => {
-            try {
-                const data = await fetch('/api');
-
-                if (data.ok) {
-                    setMessage(await data.json());
-                } else {
-                    console.error('Error with data: ', data.statusText);
-                }
-            } catch (error) {
-                console.error('Error making fetch: ', error);
-            }
-        }
-
-        testData();
-    }, [])
+    //const [message, setMessage] = useState('');
 
     return (
         <div className="App">
             <h1>Hello World!</h1>
-            <pre>{JSON.stringify(message)}</pre> 
+            <Router>
+                <Routes>
+                    <Route path="/" element={<MainPage />}/>
+                    <Route path="/library" element={ <LibraryPage />}/>
+                </Routes>
+            </Router>
         </div>
     );
 }
