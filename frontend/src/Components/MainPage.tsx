@@ -16,14 +16,14 @@ function MainPage() {
     }
   }
 
-  const handleSaveMovie = async (event: React.FormEvent<HTMLFormElement>, movieJSON: string) => {
-    event.preventDefault() // Prevents it from reloading the page
+  const handleSaveMovie = async (event: React.FormEvent<HTMLFormElement>, movieJSONstrinfyed: string) => {
+    event.preventDefault(); // Prevents it from reloading the page
 
     try {
       const res = await fetch('/api', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json'},
-        body: movieJSON
+        body: movieJSONstrinfyed
       })
 
       if(res.ok) console.log('Data sent!')

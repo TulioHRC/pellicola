@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common'
+import { Controller, Get, Post, Delete, Body } from '@nestjs/common'
 import { MovieWatchedService } from 'src/services/MovieWatched.service'
 import { MovieWatched } from 'src/entity/MovieWatched.entity'
 
@@ -14,6 +14,11 @@ export class ApiController {
 
     @Post()
     create(@Body() movieWatchedData: Partial<MovieWatched>): Promise<MovieWatched> {
-        return this.movieService.create(movieWatchedData)
+        return this.movieService.create(movieWatchedData);
+    }
+
+    @Delete()
+    delete(@Body() movieWatchedData: Partial<MovieWatched>): Promise<MovieWatched> {
+        return this.movieService.delete(movieWatchedData.id);
     }
 }

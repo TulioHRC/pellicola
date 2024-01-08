@@ -15,6 +15,12 @@ export class MovieWatchedService {
 
   async create(movieWatchedData: Partial<MovieWatched>): Promise<MovieWatched> {
     const newMovieWatched = this.movieRepository.create(movieWatchedData);
-    return this.movieRepository.save(newMovieWatched);
+    return await this.movieRepository.save(newMovieWatched);
+  }
+
+  async delete(id: number): Promise<MovieWatched> {
+    const movieWatchedToDelete = await this.movieRepository.findOne(id)
+    await this.movieRepository.remove(movieWatchedToDelete);
+    return movieWatchedToDelete;
   }
 }
