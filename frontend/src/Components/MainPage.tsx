@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 function MainPage() {
-  const [movies, setMovies] = useState({});
+  const [movies, setMovies] = useState({"Search": []});
 
   const searchData = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -16,6 +16,23 @@ function MainPage() {
     }
   }
 
+  const handleSaveMovie = async (event: React.FormEvent<HTMLFormElement>, movieJSON: string) => {
+    event.preventDefault() // Prevents it from reloading the page
+
+    try {
+      const res = await fetch('/api', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json'},
+        body: movieJSON
+      })
+
+      if(res.ok) console.log('Data sent!')
+      else console.error('Error while sending: ', res.statusText)
+    } catch(error) { 
+      console.error('Error while fetching: ', error)
+    }
+  }
+
   return (
     <div>
         <h2>Main Page</h2>
@@ -24,7 +41,17 @@ function MainPage() {
         <Link to="/library">Library</Link>
         <ul>
           {
-            JSON.stringify(movies)
+            movies.Search &&
+            movies.Search.map((item) => {
+              return(
+                <li id={item['imdbID']} key={item['imdbID']}>
+                  <h1>{JSON.stringify(item)}</h1>
+                  <form onSubmit={((event) => handleSaveMovie(event, JSON.stringify(item)))} >
+                    <button name="save">Save to library</button>
+                  </form>
+                </li>
+              )
+            })
           }
         </ul>
     </div>

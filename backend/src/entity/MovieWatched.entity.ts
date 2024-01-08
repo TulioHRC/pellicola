@@ -9,17 +9,17 @@ export class MovieWatched{
     imdbID: string
 
     @Column()
-    title: string
+    Title: string
 
     @Column()
-    year: number
+    Year: number
 
     @Column()
-    type: string
+    Type: string
 
     @Column()
-    posterURL: string
+    Poster: string
 
-    @Column()
+    @Column({ nullable: true })
     audioFilePath: string
 };
