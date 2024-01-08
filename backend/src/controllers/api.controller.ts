@@ -14,6 +14,6 @@ export class ApiController {
 
     @Post()
     create(@Body() movieWatchedData: Partial<MovieWatched>): Promise<MovieWatched> {
-        return this.movieService.create(movieWatchedData);
+        return this.movieService.create(movieWatchedData)
     }
 }

@@ -5,8 +5,6 @@ import LibraryPage from './Components/LibraryPage';
 
 
 function App() {
-    //const [message, setMessage] = useState('');
-
     return (
         <div className="App">
             <h1>Hello World!</h1>

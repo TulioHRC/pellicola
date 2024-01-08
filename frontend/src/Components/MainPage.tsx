@@ -42,11 +42,11 @@ function MainPage() {
         <ul>
           {
             movies.Search &&
-            movies.Search.map((item) => {
+            movies.Search.map((movie) => {
               return(
-                <li id={item['imdbID']} key={item['imdbID']}>
-                  <h1>{JSON.stringify(item)}</h1>
-                  <form onSubmit={((event) => handleSaveMovie(event, JSON.stringify(item)))} >
+                <li id={movie['imdbID']} key={movie['imdbID']}>
+                  <h1>{JSON.stringify(movie)}</h1>
+                  <form onSubmit={((event) => handleSaveMovie(event, JSON.stringify(movie)))} >
                     <button name="save">Save to library</button>
                   </form>
                 </li>
