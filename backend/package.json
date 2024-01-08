@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nest start",
-    "build": "npm install && nest build"
+    "build": "nest build",
+    "prepare": "npm install"
   },
   "author": "Tulio",
   "license": "ISC",
