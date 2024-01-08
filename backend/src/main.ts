@@ -4,9 +4,12 @@ import { AppModule } from './app.module';
 
 config(); // ENV keys (like the database key)
 
+const PORT = process.env.PORT || 3001 
+
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
-    await app.listen(3001);
+    await app.listen(PORT);
+    console.log(`Listening on ${PORT}`)
 }
 
 bootstrap();
