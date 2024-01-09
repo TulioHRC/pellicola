@@ -34,8 +34,6 @@ function LibraryPage() {
   } 
 
   useEffect(() => {
-    console.log("OPA")
-
     getSavedMovies();
   });
 
