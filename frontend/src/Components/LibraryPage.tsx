@@ -48,7 +48,7 @@ function LibraryPage() {
               return (
                 <li id={movie.imdbID} key={movie.imdbID}>
                   <h3>{JSON.stringify(movie)}</h3>
-                  <form onSubmit={((event) => handleDeleteWatchedMovie(event, JSON.stringify(movie)))}>
+                  <form onSubmit={((event: any) => handleDeleteWatchedMovie(event, JSON.stringify(movie)))}>
                     <button name='delete'>Delete Watched Movie</button>
                   </form>
                 </li>

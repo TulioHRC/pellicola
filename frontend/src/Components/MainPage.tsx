@@ -52,7 +52,7 @@ function MainPage() {
               return(
                 <li id={movie['imdbID']} key={movie['imdbID']}>
                   <h1>{JSON.stringify(movie)}</h1>
-                  <form onSubmit={((event) => handleSaveMovie(event, JSON.stringify(movie)))} >
+                  <form onSubmit={((event: any) => handleSaveMovie(event, JSON.stringify(movie)))} >
                     <button name="save">Save to library</button>
                   </form>
                 </li>
