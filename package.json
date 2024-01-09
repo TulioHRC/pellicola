@@ -46,6 +46,7 @@
     "typescript": "^5.3.3"
   },
   "devDependencies": {
+    "@nestjs/cli": "10.2.1",
     "concurrently": "^8.2.2"
   }
 }
