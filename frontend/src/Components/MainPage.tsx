@@ -23,7 +23,7 @@ function MainPage() {
     event.preventDefault(); // Prevents it from reloading the page
 
     try {
-      const res = await fetch('/api', {
+      const res = await fetch('https://pellicola-67642b36273a.herokuapp.com/api', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json'},
         body: movieJSONstrinfyed

@@ -6,7 +6,7 @@ function LibraryPage() {
 
   const getSavedMovies = async () => {
     try {
-      const data = await fetch('/api');
+      const data = await fetch('https://pellicola-67642b36273a.herokuapp.com/api');
     if(data.ok) setSavedMovies(await data.json());
     else console.error('Error with the data: ', data.statusText);
     } catch (error) { 
