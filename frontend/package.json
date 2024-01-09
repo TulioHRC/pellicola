@@ -3,13 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "proxy": "http://localhost:3001",
   "scripts": {
-    "start": "react-scripts start --setupMiddlewares",
-    "build": "react-scripts build",
+    "start": "serve -s build",
+    "build": "npm install && react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "prepare": "npm install"
+    "eject": "react-scripts eject"
   },
   "author": "Tulio",
   "license": "ISC",
@@ -26,15 +24,16 @@
     ]
   },
   "dependencies": {
-    "@types/react-router-dom": "^5.3.3",
-    "http-proxy-middleware": "^2.0.6",
+    "express": "^4.18.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.1",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "serve": "^14.2.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.47",
-    "@types/react-dom": "^18.2.18"
+    "@types/react-dom": "^18.2.18",
+    "@types/react-router-dom": "^5.3.3"
   }
 }

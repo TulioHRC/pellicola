@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 
 function MainPage() {
@@ -17,13 +17,13 @@ function MainPage() {
     } catch(error) {
       console.error('Error making fetch: ', error);
     }
-  }
+  } 
 
-  const handleSaveMovie = async (event: React.FormEvent<HTMLFormElement>, movieJSONstrinfyed: string) => {
+  const handleSaveMovie = async (event: any, movieJSONstrinfyed: string) => {
     event.preventDefault(); // Prevents it from reloading the page
 
     try {
-      const res = await fetch('/api', {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json'},
         body: movieJSONstrinfyed
@@ -42,17 +42,17 @@ function MainPage() {
   return (
     <div>
         <h2>Main Page</h2>
-        <input type="text" id="searchInput" value={searchInput} onChange={(event) => { searchData(event.target.value) }} />
+        <input type="text" id="searchInput" value={searchInput} onChange={(event: any) => { searchData(event.target.value) }} />
         <br />
         <Link to="/library">Library</Link>
         <ul>
           {
             movies.Search &&
-            movies.Search.map((movie) => {
+            movies.Search.map((movie: {"imdbID": string;}) => {
               return(
                 <li id={movie['imdbID']} key={movie['imdbID']}>
                   <h1>{JSON.stringify(movie)}</h1>
-                  <form onSubmit={((event) => handleSaveMovie(event, JSON.stringify(movie)))} >
+                  <form onSubmit={((event: any) => handleSaveMovie(event, JSON.stringify(movie)))} >
                     <button name="save">Save to library</button>
                   </form>
                 </li>
