@@ -6,7 +6,7 @@ function LibraryPage() {
 
   const getSavedMovies = async () => {
     try {
-      const data = await fetch('https://pellicola-67642b36273a.herokuapp.com/api');
+      const data = await fetch(`${process.env.BACKEND_URL}/api`);
     if(data.ok) setSavedMovies(await data.json());
     else console.error('Error with the data: ', data.statusText);
     } catch (error) { 
@@ -18,7 +18,7 @@ function LibraryPage() {
     event.preventDefault(); // Prevents it from reloading the page
 
     try {
-      const data = await fetch('/api', {
+      const data = await fetch(`${process.env.BACKEND_URL}/api`, {
         method: 'DELETE',
         headers: {'Content-Type': 'application/json'},
         body: movieJSONstrinfyed
