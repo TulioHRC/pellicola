@@ -36,5 +36,8 @@
   "devDependencies": {
     "@types/react": "^18.2.47",
     "@types/react-dom": "^18.2.18"
+  },
+  "engines": {
+    "node": "20.10.0"
   }
 }
