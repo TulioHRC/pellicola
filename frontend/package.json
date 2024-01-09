@@ -6,10 +6,9 @@
   "proxy": "http://localhost:3001",
   "scripts": {
     "start": "react-scripts start --setupMiddlewares",
-    "build": "react-scripts build",
+    "build": "npm install && react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "prepare": "npm install"
+    "eject": "react-scripts eject"
   },
   "author": "Tulio",
   "license": "ISC",
