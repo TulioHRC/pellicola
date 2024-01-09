@@ -4,19 +4,15 @@ import { Link } from 'react-router-dom'
 function LibraryPage() {
   const [savedMovies, setSavedMovies] = useState([{"imdbID": ""}]);
 
-  useEffect(() => {
-    const getSavedMovies = async () => {
-      try {
-        const data = await fetch('/api');
-      if(data.ok) setSavedMovies(await data.json());
-      else console.error('Error with the data: ', data.statusText);
-      } catch (error) { 
-        console.error('Error while fetching server: ', error);
-      }
+  const getSavedMovies = async () => {
+    try {
+      const data = await fetch('/api');
+    if(data.ok) setSavedMovies(await data.json());
+    else console.error('Error with the data: ', data.statusText);
+    } catch (error) { 
+      console.error('Error while fetching server: ', error);
     }
-
-    getSavedMovies();
-  });
+  }
 
   const handleDeleteWatchedMovie = async (event: React.FormEvent<HTMLFormElement>, movieJSONstrinfyed: string) => {
     event.preventDefault(); // Prevents it from reloading the page
@@ -33,7 +29,13 @@ function LibraryPage() {
     } catch(error) {
       console.error('Error while fetching: ', error);
     }
-  }
+
+    getSavedMovies(); // Updates list
+  } 
+
+  useEffect(() => {
+    getSavedMovies();
+  });
 
   return (
     <div>
