@@ -18,8 +18,12 @@ export class MovieWatchedService {
     return await this.movieRepository.save(newMovieWatched);
   }
 
-  async delete(id: number): Promise<MovieWatched> {
-    const movieWatchedToDelete = await this.movieRepository.findOne(id)
+  async delete(movieID: number): Promise<MovieWatched> {
+    const movieWatchedToDelete = await this.movieRepository.findOne({
+      where: {
+        id: movieID
+      }
+    })
     await this.movieRepository.remove(movieWatchedToDelete);
     return movieWatchedToDelete;
   }

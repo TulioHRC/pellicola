@@ -12,7 +12,7 @@ export class MovieWatched{
     Title: string
 
     @Column()
-    Year: number
+    Year: string
 
     @Column()
     Type: string
