@@ -23,7 +23,7 @@ function MainPage() {
     event.preventDefault(); // Prevents it from reloading the page
 
     try {
-      const res = await fetch(`${process.env.BACKEND_URL}/api`, {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json'},
         body: movieJSONstrinfyed
