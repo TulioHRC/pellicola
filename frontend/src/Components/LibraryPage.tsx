@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 
 function LibraryPage() {
@@ -14,7 +14,7 @@ function LibraryPage() {
     }
   }
 
-  const handleDeleteWatchedMovie = async (event: React.FormEvent<HTMLFormElement>, movieJSONstrinfyed: string) => {
+  const handleDeleteWatchedMovie = async (event: any, movieJSONstrinfyed: string) => {
     event.preventDefault(); // Prevents it from reloading the page
 
     try {
@@ -44,7 +44,7 @@ function LibraryPage() {
         <ul>
           {
             (savedMovies[0].imdbID != "")  && // Prevents it from showing non-relevant data
-            savedMovies.map((movie) => {
+            savedMovies.map((movie: any) => {
               return (
                 <li id={movie.imdbID} key={movie.imdbID}>
                   <h3>{JSON.stringify(movie)}</h3>

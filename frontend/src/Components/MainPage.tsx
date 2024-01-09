@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 
 function MainPage() {
@@ -17,9 +17,9 @@ function MainPage() {
     } catch(error) {
       console.error('Error making fetch: ', error);
     }
-  }
+  } 
 
-  const handleSaveMovie = async (event: React.FormEvent<HTMLFormElement>, movieJSONstrinfyed: string) => {
+  const handleSaveMovie = async (event: any, movieJSONstrinfyed: string) => {
     event.preventDefault(); // Prevents it from reloading the page
 
     try {
@@ -48,7 +48,7 @@ function MainPage() {
         <ul>
           {
             movies.Search &&
-            movies.Search.map((movie) => {
+            movies.Search.map((movie: {"imdbID": string;}) => {
               return(
                 <li id={movie['imdbID']} key={movie['imdbID']}>
                   <h1>{JSON.stringify(movie)}</h1>
