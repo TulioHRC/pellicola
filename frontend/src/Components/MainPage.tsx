@@ -42,7 +42,7 @@ function MainPage() {
   return (
     <div>
         <h2>Main Page</h2>
-        <input type="text" id="searchInput" value={searchInput} onChange={(event) => { searchData(event.target.value) }} />
+        <input type="text" id="searchInput" value={searchInput} onChange={(event: any) => { searchData(event.target.value) }} />
         <br />
         <Link to="/library">Library</Link>
         <ul>
