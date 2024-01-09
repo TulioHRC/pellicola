@@ -43,6 +43,7 @@ function LibraryPage() {
         <Link to="/">Main</Link>
         <ul>
           {
+            (savedMovies[0].imdbID != "")  && // Prevents it from showing non-relevant data
             savedMovies.map((movie) => {
               return (
                 <li id={movie.imdbID} key={movie.imdbID}>
