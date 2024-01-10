@@ -10,8 +10,13 @@ function LibraryPage() {
   const getSavedMovies = async () => {
     try {
       const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`);
-    if(data.ok) setSavedMovies(await data.json());
-    else console.error('Error with the data: ', data.statusText);
+      console.log("oi");
+      if(data.ok) {
+        console.log("oi2")
+        const data2 = await data.json();
+        console.log(data2);
+        setSavedMovies(data2);}
+      else console.error('Error with the data: ', data.statusText);
     } catch (error) { 
       console.error('Error while fetching server: ', error);
     }
