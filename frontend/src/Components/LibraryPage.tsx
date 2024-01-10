@@ -1,5 +1,6 @@
 import React, { useEffect, useState, FormEvent } from 'react'
 import { Link } from 'react-router-dom'
+import "../styles/Components/LibraryPage.css"
 
 function LibraryPage() {
   const [savedMovies, setSavedMovies] = useState([{"imdbID": ""}]);
@@ -34,6 +35,13 @@ function LibraryPage() {
   } 
 
   useEffect(() => {
+    const mainPageButton = document.getElementById("mainPageButton");
+    const libraryPageButton = document.getElementById("libraryPageButton");
+    if(mainPageButton && libraryPageButton){
+      mainPageButton.style.textDecoration = "none";
+      libraryPageButton.style.textDecoration = "underline";
+    };
+
     getSavedMovies();
   });
 

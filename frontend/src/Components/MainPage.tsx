@@ -1,6 +1,7 @@
-import React, { useEffect, useState, FormEvent } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Typography, TextField } from '@mui/material'
 import { Link } from 'react-router-dom'
+import "../styles/Components/MainPage.css"
 
 function MainPage() {
   const [searchInput, setSearchInput] = useState('');
@@ -39,6 +40,15 @@ function MainPage() {
     setSearchInput(""); // Resets the search input
     searchData("");
   }
+
+  useEffect(() => {
+    const mainPageButton = document.getElementById("mainPageButton");
+    const libraryPageButton = document.getElementById("libraryPageButton");
+    if(mainPageButton && libraryPageButton){
+      mainPageButton.style.textDecoration = "underline";
+      libraryPageButton.style.textDecoration = "none";
+    };
+  })
 
   return (
     <div>
