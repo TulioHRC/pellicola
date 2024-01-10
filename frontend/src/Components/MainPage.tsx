@@ -7,7 +7,6 @@ function MainPage() {
   const [movies, setMovies] = useState({"Search": []});
 
   const searchData = async (changedInputValue: string) => {
-    console.log("hey")
     setSearchInput(changedInputValue);
     
 
@@ -56,7 +55,7 @@ function MainPage() {
         <Typography variant="h2" gutterBottom>
           Main Page
         </Typography>
-        <TextField type="text" id="searchInput" value={searchInput} onChange={(event: any) => setSearchInput(event.target.value)} variant="outlined" placeholder="Pesquisar..."/>
+        <TextField type="text" id="searchInput" value={searchInput} onChange={(event: any) => searchData(event.target.value)} variant="outlined" placeholder="Search..."/>
         <br />
         <ul>
           {
