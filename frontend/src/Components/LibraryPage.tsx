@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Grid, Card, CardContent, Typography, Button, CardMedia } from '@mui/material'
+import { Typography, IconButton, Box, Grid, Card, CardContent, Button, CardMedia } from '@mui/material'
+import SearchOffIcon from '@mui/icons-material/SearchOff';
 import CSSnavBarButtonsSelect from '../utils/CSSfunctions';
 import "../styles/Components/LibraryPage.css"
 
@@ -80,6 +81,17 @@ function LibraryPage() {
       <Box display="flex" justifyContent="center" sx={{ marginTop: 8 }}>
         <GridCardsWatchedMovies moviesWatchedData={savedMovies}/>
       </Box>
+      {
+            (savedMovies[0].imdbID === "") && // In case it has no saved movie
+            <Box display="flex" justifyContent="center" >
+              <IconButton color="primary" aria-label="search">
+                <SearchOffIcon />
+              </IconButton>
+              <Typography variant="h6" gutterBottom>
+                We couldn't find any saved movies.
+              </Typography>
+            </Box>
+          }
     </div>
   )
 }
