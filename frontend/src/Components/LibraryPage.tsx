@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Grid, Card, CardContent, Typography, Button, CardMedia } from '@mui/material'
+import { Box, Grid, Card, CardContent, Typography, Button, CardMedia } from '@mui/material'
 import CSSnavBarButtonsSelect from '../utils/CSSfunctions';
 import "../styles/Components/LibraryPage.css"
 
@@ -42,7 +42,7 @@ function LibraryPage() {
     CSSnavBarButtonsSelect(false);
 
     getSavedMovies();
-  });
+  }, []); // [] allows the useEffect to run only one time
 
   const GridCardsWatchedMovies = ({moviesWatchedData}: { moviesWatchedData: [{"imdbID": ""}]}) => {
     return (
@@ -76,7 +76,10 @@ function LibraryPage() {
 
   return (
     <div className='library'>
+      <br />
+      <Box display="flex" justifyContent="center" sx={{ marginTop: 8 }}>
         <GridCardsWatchedMovies moviesWatchedData={savedMovies}/>
+      </Box>
     </div>
   )
 }
