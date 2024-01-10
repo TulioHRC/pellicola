@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Typography, TextField } from '@mui/material'
-import { Link } from 'react-router-dom'
 import "../styles/Components/MainPage.css"
 
 function MainPage() {
@@ -8,7 +7,9 @@ function MainPage() {
   const [movies, setMovies] = useState({"Search": []});
 
   const searchData = async (changedInputValue: string) => {
+    console.log("hey")
     setSearchInput(changedInputValue);
+    
 
     try {
       const data = await fetch(`https://www.omdbapi.com/?s=${changedInputValue}&apikey=${process.env.REACT_APP_OMDb_API_KEY}`)

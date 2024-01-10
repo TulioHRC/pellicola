@@ -35,6 +35,7 @@ function LibraryPage() {
   } 
 
   useEffect(() => {
+    // Basic CSS change of NavBar buttons styles
     const mainPageButton = document.getElementById("mainPageButton");
     const libraryPageButton = document.getElementById("libraryPageButton");
     if(mainPageButton && libraryPageButton){
