@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "serve -s build",
+    "start-dev": "react-scripts start",
     "build": "npm install && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -24,6 +25,9 @@
     ]
   },
   "dependencies": {
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.15.3",
     "express": "^4.18.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

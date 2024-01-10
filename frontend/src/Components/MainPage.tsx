@@ -1,4 +1,5 @@
 import React, { useEffect, useState, FormEvent } from 'react'
+import { Typography, TextField } from '@mui/material'
 import { Link } from 'react-router-dom'
 
 function MainPage() {
@@ -41,10 +42,11 @@ function MainPage() {
 
   return (
     <div>
-        <h2>Main Page</h2>
-        <input type="text" id="searchInput" value={searchInput} onChange={(event: any) => { searchData(event.target.value) }} />
+        <Typography variant="h2" gutterBottom>
+          Main Page
+        </Typography>
+        <TextField type="text" id="searchInput" value={searchInput} onChange={(event: any) => setSearchInput(event.target.value)} variant="outlined" placeholder="Pesquisar..."/>
         <br />
-        <Link to="/library">Library</Link>
         <ul>
           {
             movies.Search &&
