@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { TextField, Box, Grid, Card, CardContent, Typography, Button, CardMedia } from '@mui/material'
 import CSSnavBarButtonsSelect from '../utils/CSSfunctions';
 import "../styles/Components/MainPage.css"
-import { blue } from '@mui/material/colors';
 
 
 function MainPage() {

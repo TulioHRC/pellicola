@@ -10,11 +10,8 @@ function LibraryPage() {
   const getSavedMovies = async () => {
     try {
       const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`);
-      console.log("oi");
       if(data.ok) {
-        console.log("oi2")
         const data2 = await data.json();
-        console.log(data2);
         setSavedMovies(data2);}
       else console.error('Error with the data: ', data.statusText);
     } catch (error) { 
@@ -47,11 +44,12 @@ function LibraryPage() {
     getSavedMovies();
   });
 
-  const GridCardsWatchedMovies = ({moviesData}: { moviesData: {"Search": []}}) => {
+  const GridCardsWatchedMovies = ({moviesWatchedData}: { moviesWatchedData: [{"imdbID": ""}]}) => {
     return (
       <Grid container spacing={3}>
-        {moviesData.Search &&
-          moviesData.Search.map((movie: { imdbID: string; Title: string; Year: string, Poster: string }) => (
+        {
+          (moviesWatchedData[0].imdbID != "")  && // Prevents it from showing non-relevant data
+            moviesWatchedData.map((movie: any) => (
             <Grid item key={movie.imdbID} xs={12} sm={6} md={4} lg={4}>
               <Card>
                 <CardContent>
@@ -78,7 +76,7 @@ function LibraryPage() {
 
   return (
     <div className='library'>
-        <GridCardsWatchedMovies moviesData={savedMovies}/>
+        <GridCardsWatchedMovies moviesWatchedData={savedMovies}/>
     </div>
   )
 }
