@@ -1,5 +1,5 @@
-import React, { useEffect, useState, FormEvent } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Grid, Card, CardContent, Typography, Button, CardMedia } from '@mui/material'
 import CSSnavBarButtonsSelect from '../utils/CSSfunctions';
 import "../styles/Components/LibraryPage.css"
 
@@ -42,23 +42,38 @@ function LibraryPage() {
     getSavedMovies();
   });
 
-  return (
-    <div>
-        <ul>
-          {
-            (savedMovies[0].imdbID != "")  && // Prevents it from showing non-relevant data
-            savedMovies.map((movie: any) => {
-              return (
-                <li id={movie.imdbID} key={movie.imdbID}>
-                  <h3>{JSON.stringify(movie)}</h3>
-                  <form onSubmit={((event: any) => handleDeleteWatchedMovie(event, JSON.stringify(movie)))}>
-                    <button name='delete'>Delete Watched Movie</button>
+  const GridCardsWatchedMovies = ({moviesData}: { moviesData: {"Search": []}}) => {
+    return (
+      <Grid container spacing={3}>
+        {moviesData.Search &&
+          moviesData.Search.map((movie: { imdbID: string; Title: string; Year: string, Poster: string }) => (
+            <Grid item key={movie.imdbID} xs={12} sm={6} md={4} lg={4}>
+              <Card>
+                <CardContent>
+                  <CardMedia
+                    component="img"
+                    height="340"
+                    image={movie.Poster}
+                    alt={movie.Title}
+                  />
+                  <Typography variant="h5">{movie.Title}</Typography>
+                  <Typography variant="subtitle1">{movie.Year}</Typography>
+                  <form onSubmit={(event: any) => handleDeleteWatchedMovie(event, JSON.stringify(movie))}>
+                    <Button type="submit" variant="outlined" color="primary" sx={{color: "red", borderColor: "red"}}>
+                      Delete Watched Movie
+                    </Button>
                   </form>
-                </li>
-              )
-            })
-          }
-        </ul>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+      </Grid>
+    )
+  }
+
+  return (
+    <div className='library'>
+        <GridCardsWatchedMovies moviesData={savedMovies}/>
     </div>
   )
 }

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { TextField, Box, Grid, Card, CardContent, Typography, Button } from '@mui/material'
+import { TextField, Box, Grid, Card, CardContent, Typography, Button, CardMedia } from '@mui/material'
 import CSSnavBarButtonsSelect from '../utils/CSSfunctions';
 import "../styles/Components/MainPage.css"
+import { blue } from '@mui/material/colors';
 
 
 function MainPage() {
@@ -47,6 +48,35 @@ function MainPage() {
     CSSnavBarButtonsSelect(true);
   })
 
+  const GridCardsMovies = ({moviesData}: { moviesData: {"Search": []}}) => {
+    return (
+      <Grid container spacing={3}>
+        {moviesData.Search &&
+          moviesData.Search.map((movie: { imdbID: string; Title: string; Year: string, Poster: string }) => (
+            <Grid item key={movie.imdbID} xs={12} sm={6} md={4} lg={4}>
+              <Card>
+                <CardContent>
+                  <CardMedia
+                    component="img"
+                    height="340"
+                    image={movie.Poster}
+                    alt={movie.Title}
+                  />
+                  <Typography variant="h5">{movie.Title}</Typography>
+                  <Typography variant="subtitle1">{movie.Year}</Typography>
+                  <form onSubmit={(event: any) => handleSaveMovie(event, JSON.stringify(movie))}>
+                    <Button type="submit" variant="outlined" color="primary">
+                      Save to library
+                    </Button>
+                  </form>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+      </Grid>
+    )
+  }
+
   return (
     <div>
       <br />
@@ -57,21 +87,7 @@ function MainPage() {
         </Box>
       </div>
       <br />
-      <ul>
-        {
-          movies.Search &&
-          movies.Search.map((movie: {"imdbID": string;}) => {
-            return(
-              <li id={movie['imdbID']} key={movie['imdbID']}>
-                <h1>{JSON.stringify(movie)}</h1>
-                <form onSubmit={((event: any) => handleSaveMovie(event, JSON.stringify(movie)))} >
-                  <button name="save">Save to library</button>
-                </form>
-              </li>
-            )
-          })
-        }
-      </ul>
+      <GridCardsMovies moviesData={movies}/>
     </div>
   );
 }
