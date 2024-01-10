@@ -1,6 +1,8 @@
 import React, { useEffect, useState, FormEvent } from 'react'
 import { Link } from 'react-router-dom'
+import CSSnavBarButtonsSelect from '../utils/CSSfunctions';
 import "../styles/Components/LibraryPage.css"
+
 
 function LibraryPage() {
   const [savedMovies, setSavedMovies] = useState([{"imdbID": ""}]);
@@ -31,25 +33,17 @@ function LibraryPage() {
       console.error('Error while fetching: ', error);
     }
 
-    getSavedMovies(); // Updates list
+    getSavedMovies(); // Updates library
   } 
 
   useEffect(() => {
-    // Basic CSS change of NavBar buttons styles
-    const mainPageButton = document.getElementById("mainPageButton");
-    const libraryPageButton = document.getElementById("libraryPageButton");
-    if(mainPageButton && libraryPageButton){
-      mainPageButton.style.textDecoration = "none";
-      libraryPageButton.style.textDecoration = "underline";
-    };
+    CSSnavBarButtonsSelect(false);
 
     getSavedMovies();
   });
 
   return (
     <div>
-        <h2>Library</h2>
-        <Link to="/">Main</Link>
         <ul>
           {
             (savedMovies[0].imdbID != "")  && // Prevents it from showing non-relevant data
