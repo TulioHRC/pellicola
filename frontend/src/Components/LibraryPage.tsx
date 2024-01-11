@@ -11,7 +11,6 @@ function LibraryPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const getSavedMovies = async () => {
-    setIsLoading(true);
     try {
       const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`);
       if(data.ok) {
@@ -43,10 +42,9 @@ function LibraryPage() {
       setIsLoading(false);
       // await Error message
     } finally {
+      getSavedMovies(); // Updates library
       setIsLoading(false);
     }
-
-    getSavedMovies(); // Updates library
   } 
 
   useEffect(() => {
