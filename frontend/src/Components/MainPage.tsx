@@ -38,15 +38,9 @@ function MainPage() {
       const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`);
       if(data.ok) {
         const dataJSON = await data.json();
-        console.log(movie);
-        console.log(JSON.stringify(dataJSON));
-        for(let i = 0; i < dataJSON.length; i++){
-          console.log(dataJSON[i]);
-          if(dataJSON[i].imdbID == movie.imdbID){
-            console.log("oi")
+        for(let i = 0; i < dataJSON.length; i++)
+          if(dataJSON[i].imdbID == movie.imdbID) 
             return true;
-          }
-        }
       } else {
         console.error('Error with data: ', data.statusText);
         throw new Error(data.statusText);
@@ -61,10 +55,12 @@ function MainPage() {
 
   const handleSaveMovie = async (event: any, movieJSONstrinfyed: string) => {
     setIsLoading(true);
-    if(await isMovieAlreadySaved(await JSON.parse(movieJSONstrinfyed))){ // Restrictive
+    if(await isMovieAlreadySaved(await JSON.parse(movieJSONstrinfyed)) == true){ // Restrictive
       setIsMovieAlreadySavedFound(true);
+      console.log("ola")
       return;
     }
+    console.log("oi")
     event.preventDefault(); // Prevents it from reloading the page
 
     try {
