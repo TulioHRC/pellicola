@@ -42,7 +42,7 @@ function MainPage() {
         console.log(JSON.stringify(dataJSON));
         for(let i = 0; i < dataJSON.length; i++){
           console.log(dataJSON[i]);
-          if(dataJSON[i].imdbID == movie){
+          if(dataJSON[i].imdbID == movie.imdbID){
             console.log("oi")
             return true;
           }
