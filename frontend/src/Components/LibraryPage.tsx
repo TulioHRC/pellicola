@@ -41,7 +41,7 @@ function LibraryPage() {
         body: movieJSONstrinfyed
       });
 
-      if(data.ok) console.log('Watched Movie deleted!');
+      if(data.ok) setMovieDeletedSnackBarActive(true);
       else {
         console.error('Error with data: ', data.statusText);
         throw new Error(data.statusText);
