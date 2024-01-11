@@ -2,13 +2,16 @@ import React, { useEffect, useState } from 'react'
 import { Typography, IconButton, Box, Grid, Card, CardContent, Button, CardMedia } from '@mui/material'
 import SearchOffIcon from '@mui/icons-material/SearchOff';
 import CSSnavBarButtonsSelect from '../utils/CSSfunctions';
+import LoadingScreen from './LoadingScreen';
 import "../styles/Components/LibraryPage.css"
 
 
 function LibraryPage() {
   const [savedMovies, setSavedMovies] = useState([{"imdbID": ""}]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getSavedMovies = async () => {
+    setIsLoading(true);
     try {
       const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`);
       if(data.ok) {
@@ -17,10 +20,13 @@ function LibraryPage() {
       else console.error('Error with the data: ', data.statusText);
     } catch (error) { 
       console.error('Error while fetching server: ', error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
   const handleDeleteWatchedMovie = async (event: any, movieJSONstrinfyed: string) => {
+    setIsLoading(true);
     event.preventDefault(); // Prevents it from reloading the page
 
     try {
@@ -34,15 +40,21 @@ function LibraryPage() {
       else console.error('Error with data: ', data.statusText);
     } catch(error) {
       console.error('Error while fetching: ', error);
+      setIsLoading(false);
+      // await Error message
+    } finally {
+      setIsLoading(false);
     }
 
     getSavedMovies(); // Updates library
   } 
 
   useEffect(() => {
+    setIsLoading(true);
     CSSnavBarButtonsSelect(false);
 
     getSavedMovies();
+    setIsLoading(false);
   }, []); // [] allows the useEffect to run only one time
 
   const GridCardsWatchedMovies = ({moviesWatchedData}: { moviesWatchedData: [{"imdbID": ""}]}) => {
@@ -77,11 +89,15 @@ function LibraryPage() {
 
   return (
     <div className='library'>
-      <br />
-      <Box display="flex" justifyContent="center" sx={{ marginTop: 8 }}>
-        <GridCardsWatchedMovies moviesWatchedData={savedMovies}/>
-      </Box>
       {
+        isLoading ?
+        <LoadingScreen /> :
+        <div>
+          <br />
+          <Box display="flex" justifyContent="center" sx={{ marginTop: 8 }}>
+            <GridCardsWatchedMovies moviesWatchedData={savedMovies}/>
+          </Box>
+          {
             (savedMovies[0].imdbID === "") && // In case it has no saved movie
             <Box display="flex" justifyContent="center" >
               <IconButton color="primary" aria-label="search">
@@ -92,6 +108,8 @@ function LibraryPage() {
               </Typography>
             </Box>
           }
+        </div>
+      }
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { TextField, Box, Grid, Card, CardContent, Typography, Button, CardMedia } from '@mui/material'
+import LoadingScreen from './LoadingScreen';
 import CSSnavBarButtonsSelect from '../utils/CSSfunctions';
 import "../styles/Components/MainPage.css"
 
@@ -7,9 +8,10 @@ import "../styles/Components/MainPage.css"
 function MainPage() {
   const [searchInput, setSearchInput] = useState('');
   const [movies, setMovies] = useState({"Search": []});
+  const [isLoading, setIsLoading] = useState(false);
 
   const searchData = async (changedInputValue: string) => {
-    
+    setIsLoading(true);
     setSearchInput(changedInputValue);
 
     try {
@@ -20,10 +22,13 @@ function MainPage() {
       else console.error('Error with api data: ', data.statusText)
     } catch(error) {
       console.error('Error making fetch: ', error);
+    } finally {
+      setIsLoading(false);
     }
   } 
 
   const handleSaveMovie = async (event: any, movieJSONstrinfyed: string) => {
+    setIsLoading(true);
     event.preventDefault(); // Prevents it from reloading the page
 
     try {
@@ -37,10 +42,11 @@ function MainPage() {
       else console.error('Error while sending: ', res.statusText)
     } catch(error) { 
       console.error('Error while fetching: ', error)
+    } finally {
+      setSearchInput(""); // Resets the search input
+      searchData("");
+      setIsLoading(false);
     }
-
-    setSearchInput(""); // Resets the search input
-    searchData("");
   }
 
   useEffect(() => {
@@ -85,8 +91,15 @@ function MainPage() {
             placeholder="Search..." sx={{width: "300px" }}/>
         </Box>
       </div>
-      <br />
-      <GridCardsMovies moviesData={movies}/>
+      {
+        isLoading ?
+        <LoadingScreen /> :
+        <div>
+          <br />
+          <GridCardsMovies moviesData={movies}/>
+        </div>
+        
+      }
     </div>
   );
 }
