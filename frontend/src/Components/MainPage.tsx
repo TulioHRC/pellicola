@@ -3,67 +3,56 @@ import { TextField, Box, Grid, Card, CardContent, Typography, Button, CardMedia,
 import LoadingScreen from './LoadingScreen';
 import BasicSnackbar from './BasicSnackbar';
 import CSSnavBarButtonsSelect from '../utils/CSSfunctions';
-import "../styles/Components/MainPage.css"
-
 
 function MainPage() { 
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInputText, setSearchInputText] = useState('');
   const [movies, setMovies] = useState({"Search": []});
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isMovieAlreadySavedFound, setIsMovieAlreadySavedFound] = useState(false);
   const [movieSavedSnackBarActive, setMovieSavedSnackBarActive] = useState(false);
 
-  const searchData = async (changedInputValue: string) => {
+  const searchAPIData = async (changedInputTextValue: string) => {
     setIsLoading(true);
-    setSearchInput(changedInputValue);
+    setSearchInputText(changedInputTextValue);
 
     try {
-      const data = await fetch(`https://www.omdbapi.com/?s=${changedInputValue}&apikey=${process.env.REACT_APP_OMDb_API_KEY}`);
-      if(data.ok) {
+      const data = await fetch(`https://www.omdbapi.com/?s=${changedInputTextValue}&apikey=${process.env.REACT_APP_OMDb_API_KEY}`);
+      if(data.ok)
         setMovies(await data.json());
-      }
       else {
         console.error('Error with data: ', data.statusText);
         throw new Error(data.statusText);
       }
     } catch(error) {
-      console.error('Error making fetch: ', error);
+      console.error('Error while fetching: ', error);
       setIsError(true);
     } finally {
       setIsLoading(false);
     }
   }
   
-  const isMovieAlreadySaved = async (movie: {"imdbID": ""}) => {
+  const isMovieAlreadySaved = async (movieToSave: {"imdbID": ""}) => {
     try {
       const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`);
       if(data.ok) {
         const dataJSON = await data.json();
         for(let i = 0; i < dataJSON.length; i++)
-          if(dataJSON[i].imdbID == movie.imdbID) 
+          if(dataJSON[i].imdbID == movieToSave.imdbID) 
             return true;
       } else {
         console.error('Error with data: ', data.statusText);
         throw new Error(data.statusText);
       }
     } catch (error) { 
-      console.error('Error while fetching server: ', error);
+      console.error('Error while fetching: ', error);
       setIsError(true);
     } 
     return false;
-    
   }
 
-  const handleSaveMovie = async (event: any, movieJSONstrinfyed: string) => {
-    setIsLoading(true);
-    event.preventDefault(); // Prevents it from reloading the page
-
+  const saveMovie = async (movieJSONstrinfyed: string) => {
     try {
-      if(await isMovieAlreadySaved(await JSON.parse(movieJSONstrinfyed)) == true){ // Restrictive
-        setIsMovieAlreadySavedFound(true);
-        throw new Error("Movie already saved!");
-      }
       const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json'},
@@ -78,16 +67,43 @@ function MainPage() {
     } catch(error) { 
       console.error('Error while fetching: ', error)
       setIsError(true);
-    } finally {
-      setSearchInput(""); // Resets the search input
-      searchData("");
-      setIsLoading(false);
     }
+  }
+
+  const handleSaveMovie = async (event: any, movieJSONstrinfyed: string) => {
+    setIsLoading(true);
+    event.preventDefault(); // Prevents it from reloading the page
+
+    if(await isMovieAlreadySaved(await JSON.parse(movieJSONstrinfyed)) == true) // Restrictive
+      setIsMovieAlreadySavedFound(true);
+    else
+      await saveMovie(movieJSONstrinfyed);
+
+    setSearchInputText(""); // Resets the search input
+    searchAPIData("");
+    setIsLoading(false);
   }
 
   useEffect(() => {
     CSSnavBarButtonsSelect(true);
   })
+
+  const AlreadySavedBackdrop = () => {
+    return(
+      <Backdrop open={isMovieAlreadySavedFound} onClick={(event: any) => {if (event.target === event.currentTarget) setIsMovieAlreadySavedFound(false);}}>
+        <Box backgroundColor="white" padding={2} borderRadius={8} display="flex" flexDirection="column" alignItems="center">
+          <Typography variant="h6" color="textPrimary" gutterBottom>
+            This movie is already saved in your library.
+          </Typography>
+          <Box display="flex" justifyContent="center" marginTop={2}>
+            <Button variant="contained" color="primary" sx={{ marginRight: 2 }} onClick={() => setIsMovieAlreadySavedFound(false)}>
+              Ok
+            </Button>
+          </Box>
+        </Box>
+      </Backdrop>
+    )
+  }
 
   const GridCardsMovies = ({moviesData}: { moviesData: {"Search": []}}) => {
     return (
@@ -97,12 +113,7 @@ function MainPage() {
             <Grid item key={movie.imdbID} xs={12} sm={6} md={4} lg={4}>
               <Card>
                 <CardContent>
-                  <CardMedia
-                    component="img"
-                    height="340"
-                    image={movie.Poster}
-                    alt={movie.Title}
-                  />
+                  <CardMedia component="img" height="340" image={movie.Poster} alt={movie.Title}/>
                   <Typography variant="h5">{movie.Title}</Typography>
                   <Typography variant="subtitle1">{movie.Year}</Typography>
                   <form onSubmit={(event: any) => handleSaveMovie(event, JSON.stringify(movie))}>
@@ -118,21 +129,6 @@ function MainPage() {
     )
   }
 
-  const AlreadySavedBackdrop = () => {
-    return(
-      <Backdrop open={isMovieAlreadySavedFound} onClick={(event: any) => {if (event.target === event.currentTarget) setIsMovieAlreadySavedFound(false)}}>
-        <Box backgroundColor="white" padding={2} borderRadius={8} display="flex" flexDirection="column" alignItems="center">
-          <Typography variant="h6" color="textPrimary" gutterBottom>
-            This movie is already saved in your library.</Typography>
-          <Box display="flex" justifyContent="center" marginTop={2}>
-            <Button variant="contained" color="primary" sx={{ marginRight: 2 }} onClick={() => setIsMovieAlreadySavedFound(false)}>
-              ok</Button>
-          </Box>
-        </Box>
-      </Backdrop>
-    )
-  }
-
   return (
     <div>
       <AlreadySavedBackdrop />
@@ -142,8 +138,8 @@ function MainPage() {
       <br />
       <div id="searchInputBox">
         <Box display="flex" justifyContent="center" sx={{ marginTop: 8 }}>
-          <TextField type="text" id="searchInput" value={searchInput} onChange={(event: any) => searchData(event.target.value)} variant="outlined" 
-            placeholder="Search..." sx={{width: "300px" }}/>
+          <TextField type="text" id="searchInput" value={searchInputText} onChange={(event: any) => searchAPIData(event.target.value)} variant="outlined" 
+            placeholder="Search..." autoComplete="off" sx={{width: "300px" }}/>
         </Box>
       </div>
       {
@@ -153,7 +149,6 @@ function MainPage() {
           <br />
           <GridCardsMovies moviesData={movies}/>
         </div>
-        
       }
     </div>
   );
