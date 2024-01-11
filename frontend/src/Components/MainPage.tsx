@@ -41,8 +41,10 @@ function MainPage() {
         console.log(movie);
         console.log(JSON.stringify(dataJSON));
         for(let i = 0; i < dataJSON.length; i++)
-          if(dataJSON[i].imdbID === movie) return true;
-      }
+          if(dataJSON[i].imdbID === movie){
+            console.log("oi")
+            return true;
+          }
       else {
         console.error('Error with data: ', data.statusText);
         throw new Error(data.statusText);
