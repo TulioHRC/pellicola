@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Typography, IconButton, Box, Grid, Card, CardContent, Button, CardMedia, Alert } from '@mui/material'
+import { Typography, IconButton, Box, Grid, Card, CardContent, Button, CardMedia, Alert, Backdrop } from '@mui/material'
 import SearchOffIcon from '@mui/icons-material/SearchOff';
 import CSSnavBarButtonsSelect from '../utils/CSSfunctions';
 import LoadingScreen from './LoadingScreen';
@@ -10,6 +10,7 @@ function LibraryPage() {
   const [savedMovies, setSavedMovies] = useState([{"imdbID": ""}]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [isConfirmFormOpen, setIsConfirmFormOpen] = useState(false);
 
   const getSavedMovies = async () => {
     try {
@@ -76,9 +77,14 @@ function LibraryPage() {
                   <Typography variant="h5">{movie.Title}</Typography>
                   <Typography variant="subtitle1">{movie.Year}</Typography>
                   <form onSubmit={(event: any) => handleDeleteWatchedMovie(event, JSON.stringify(movie))}>
-                    <Button type="submit" variant="outlined" color="primary" sx={{color: "red", borderColor: "red"}}>
+                    <Button variant="outlined" color="primary" onClick={setIsConfirmFormOpen(true)} sx={{color: "red", borderColor: "red"}}>
                       Delete Watched Movie
                     </Button>
+                    <Backdrop open={isConfirmFormOpen} onClick={() => {setIsConfirmFormOpen(false)}}>
+                      Do you want to removie '{movie.Title}' from your library?
+                      <Button type="submit" variant="contained" color="success">Yes</Button>
+                      <Button variant="contained" color="error" onClick={() => {setIsConfirmFormOpen(false)}}>No</Button>
+                    </Backdrop>
                   </form>
                 </CardContent>
               </Card>
