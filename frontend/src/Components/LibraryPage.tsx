@@ -4,12 +4,10 @@ import SearchOffIcon from '@mui/icons-material/SearchOff';
 import CSSnavBarButtonsSelect from '../utils/CSSfunctions';
 import BasicSnackbar from './BasicSnackbar';
 import LoadingScreen from './LoadingScreen';
-import "../styles/Components/LibraryPage.css"
-
 
 function LibraryPage() {
   const [savedMovies, setSavedMovies] = useState([{"imdbID": ""}]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [confirmFormOpened, setConfirmFormOpened] = useState({"imdbID": ""});
   const [movieDeletedSnackBarActive, setMovieDeletedSnackBarActive] = useState(false);
@@ -23,17 +21,14 @@ function LibraryPage() {
         throw new Error(data.statusText);
       }
     } catch (error) { 
-      console.error('Error while fetching server: ', error);
+      console.error('Error while fetching: ', error);
       setIsError(true);
     } finally {
       setIsLoading(false);
     }
   }
 
-  const handleDeleteWatchedMovie = async (event: any, movieJSONstrinfyed: string) => {
-    setIsLoading(true);
-    event.preventDefault(); // Prevents it from reloading the page
-
+  const deleteMovie = async (movieJSONstrinfyed: string) => {
     try {
       const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`, {
         method: 'DELETE',
@@ -49,10 +44,17 @@ function LibraryPage() {
     } catch(error) {
       console.error('Error while fetching: ', error);
       setIsError(true);
-    } finally {
-      getSavedMovies(); // Updates library
-      setIsLoading(false);
     }
+  }
+
+  const handleDeleteWatchedMovie = async (event: any, movieJSONstrinfyed: string) => {
+    setIsLoading(true);
+    event.preventDefault(); // Prevents it from reloading the page
+
+    await deleteMovie(movieJSONstrinfyed);
+    
+    await getSavedMovies(); // Updates library
+    setIsLoading(false);
   } 
 
   useEffect(() => {
@@ -106,13 +108,13 @@ function LibraryPage() {
       {
         (isLoading) ?
         <LoadingScreen /> :
-        <div>
+        <div id='libraryContainer'>
           <br />
           <Box display="flex" justifyContent="center" sx={{ marginTop: 8 }}>
             <GridCardsWatchedMovies moviesWatchedData={savedMovies}/>
           </Box>
           {
-            (savedMovies[0].imdbID === "" && !isError) && // In case it has no saved movie
+            (savedMovies[0].imdbID === "") && // In case it has no saved movie
             <Box display="flex" justifyContent="center" >
               <IconButton color="primary" aria-label="search">
                 <SearchOffIcon />
