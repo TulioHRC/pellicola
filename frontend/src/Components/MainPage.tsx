@@ -55,6 +55,7 @@ function MainPage() {
 
   const handleSaveMovie = async (event: any, movieJSONstrinfyed: string) => {
     setIsLoading(true);
+    console.log(await isMovieAlreadySaved(await JSON.parse(movieJSONstrinfyed)));
     if(await isMovieAlreadySaved(await JSON.parse(movieJSONstrinfyed)) == true){ // Restrictive
       setIsMovieAlreadySavedFound(true);
       console.log("ola")
