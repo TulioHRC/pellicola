@@ -48,9 +48,9 @@ function MainPage() {
     } catch (error) { 
       console.error('Error while fetching server: ', error);
       setIsError(true);
-    } finally {
-      return false;
-    }
+    } 
+    return false;
+    
   }
 
   const handleSaveMovie = async (event: any, movieJSONstrinfyed: string) => {
