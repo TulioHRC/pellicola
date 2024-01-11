@@ -38,6 +38,8 @@ function MainPage() {
       const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`);
       if(data.ok) {
         const dataJSON = await data.json();
+        console.log(movie);
+        console.log(JSON.stringify(dataJSON));
         for(let i = 0; i < dataJSON.length; i++)
           if(dataJSON[i].imdbID === movie) return true;
       }
