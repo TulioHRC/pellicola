@@ -10,8 +10,7 @@ function LibraryPage() {
   const [savedMovies, setSavedMovies] = useState([{"imdbID": ""}]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-  //const [isConfirmFormOpen, setIsConfirmFormOpen] = useState(false);
-  const [confirmFormOpenMap, setConfirmFormOpenMap] = useState({"imdbID": ""});
+  const [confirmFormOpened, setConfirmFormOpened] = useState({"imdbID": ""});
 
   const getSavedMovies = async () => {
     try {
@@ -78,16 +77,16 @@ function LibraryPage() {
                   />
                   <Typography variant="h5">{movie.Title}</Typography>
                   <Typography variant="subtitle1">{movie.Year}</Typography>
-                  <form onSubmit={(event: any) => handleDeleteWatchedMovie(event, JSON.stringify(movie))}>
-                    <Button variant="outlined" color="primary" onClick={() => {setConfirmFormOpenMap({"imdbID": movie.imdbID})}} sx={{color: "red", borderColor: "red"}}>
-                      Delete Watched Movie
-                    </Button>
-                    <Backdrop open={confirmFormOpenMap["imdbID"] === movie.imdbID} onClick={() => {setConfirmFormOpenMap({"imdbID": ""})}}>
-                      Do you want to remove '{movie.Title}' from your library?
-                      <Button type="submit" variant="contained" color="success">Yes</Button>
-                      <Button variant="contained" color="error" onClick={() => {setConfirmFormOpenMap({"imdbID": ""})}}>No</Button>
-                    </Backdrop>
-                  </form>
+                  
+                  <Button variant="outlined" color="primary" onClick={() => {setConfirmFormOpened({"imdbID": movie.imdbID})}} sx={{color: "red", borderColor: "red"}}>
+                    Delete Watched Movie
+                  </Button>
+                  <Backdrop open={confirmFormOpened["imdbID"] === movie.imdbID} onClick={() => {setConfirmFormOpened({"imdbID": ""})}}>
+                    Do you want to remove '{movie.Title}' from your library?
+                    <Button variant="contained" onClick={(event: any) => handleDeleteWatchedMovie(event, JSON.stringify(movie))} color="success">Yes</Button>
+                    <Button variant="contained" color="error" onClick={() => {setConfirmFormOpened({"imdbID": ""})}}>No</Button>
+                  </Backdrop>
+                  
                 </CardContent>
               </Card>
             </Grid>
