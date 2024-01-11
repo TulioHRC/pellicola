@@ -10,7 +10,8 @@ function LibraryPage() {
   const [savedMovies, setSavedMovies] = useState([{"imdbID": ""}]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-  const [isConfirmFormOpen, setIsConfirmFormOpen] = useState(false);
+  //const [isConfirmFormOpen, setIsConfirmFormOpen] = useState(false);
+  const [confirmFormOpenMap, setConfirmFormOpenMap] = useState({"imdbID": ""});
 
   const getSavedMovies = async () => {
     try {
@@ -78,13 +79,13 @@ function LibraryPage() {
                   <Typography variant="h5">{movie.Title}</Typography>
                   <Typography variant="subtitle1">{movie.Year}</Typography>
                   <form onSubmit={(event: any) => handleDeleteWatchedMovie(event, JSON.stringify(movie))}>
-                    <Button variant="outlined" color="primary" onClick={() => {setIsConfirmFormOpen(true)}} sx={{color: "red", borderColor: "red"}}>
+                    <Button variant="outlined" color="primary" onClick={() => {setConfirmFormOpenMap({"imdbID": movie.imdbID})}} sx={{color: "red", borderColor: "red"}}>
                       Delete Watched Movie
                     </Button>
-                    <Backdrop open={isConfirmFormOpen} onClick={() => {setIsConfirmFormOpen(false)}}>
-                      Do you want to removie '{movie.Title}' from your library?
+                    <Backdrop open={confirmFormOpenMap["imdbID"] === movie.imdbID} onClick={() => {setConfirmFormOpenMap({"imdbID": ""})}}>
+                      Do you want to remove '{movie.Title}' from your library?
                       <Button type="submit" variant="contained" color="success">Yes</Button>
-                      <Button variant="contained" color="error" onClick={() => {setIsConfirmFormOpen(false)}}>No</Button>
+                      <Button variant="contained" color="error" onClick={() => {setConfirmFormOpenMap({"imdbID": ""})}}>No</Button>
                     </Backdrop>
                   </form>
                 </CardContent>
