@@ -55,16 +55,13 @@ function MainPage() {
 
   const handleSaveMovie = async (event: any, movieJSONstrinfyed: string) => {
     setIsLoading(true);
-    console.log(await isMovieAlreadySaved(await JSON.parse(movieJSONstrinfyed)));
-    if(await isMovieAlreadySaved(await JSON.parse(movieJSONstrinfyed)) == true){ // Restrictive
-      setIsMovieAlreadySavedFound(true);
-      console.log("ola")
-      return;
-    }
-    console.log("oi")
     event.preventDefault(); // Prevents it from reloading the page
 
     try {
+      if(await isMovieAlreadySaved(await JSON.parse(movieJSONstrinfyed)) == true){ // Restrictive
+        setIsMovieAlreadySavedFound(true);
+        throw new Error("Movie already saved!");
+      }
       const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json'},
