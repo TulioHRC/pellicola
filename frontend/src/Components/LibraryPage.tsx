@@ -54,6 +54,7 @@ function LibraryPage() {
   } 
 
   useEffect(() => {
+    setIsError(false); // Avoids the error message to appear even if the problem was resolved
     CSSnavBarButtonsSelect(false);
 
     getSavedMovies();
@@ -77,7 +78,7 @@ function LibraryPage() {
                   <Typography variant="h5">{movie.Title}</Typography>
                   <Typography variant="subtitle1">{movie.Year}</Typography>
                   <form onSubmit={(event: any) => handleDeleteWatchedMovie(event, JSON.stringify(movie))}>
-                    <Button variant="outlined" color="primary" onClick={setIsConfirmFormOpen(true)} sx={{color: "red", borderColor: "red"}}>
+                    <Button variant="outlined" color="primary" onClick={() => {setIsConfirmFormOpen(true)}} sx={{color: "red", borderColor: "red"}}>
                       Delete Watched Movie
                     </Button>
                     <Backdrop open={isConfirmFormOpen} onClick={() => {setIsConfirmFormOpen(false)}}>
