@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { TextField, Box, Grid, Card, CardContent, Typography, Button, CardMedia, Alert } from '@mui/material'
+import { TextField, Box, Grid, Card, CardContent, Typography, Button, CardMedia, Alert, Backdrop } from '@mui/material'
 import LoadingScreen from './LoadingScreen';
 import CSSnavBarButtonsSelect from '../utils/CSSfunctions';
 import "../styles/Components/MainPage.css"
 
 
-function MainPage() {
+function MainPage() { 
   const [searchInput, setSearchInput] = useState('');
   const [movies, setMovies] = useState({"Search": []});
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isMovieAlreadySavedFound, setIsMovieAlreadySavedFound] = useState(false);
 
   const searchData = async (changedInputValue: string) => {
     setIsLoading(true);
@@ -30,10 +31,34 @@ function MainPage() {
     } finally {
       setIsLoading(false);
     }
-  } 
+  }
+  
+  const isMovieAlreadySaved = async (movie: {"imdbID": ""}) => {
+    try {
+      const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`);
+      if(data.ok) {
+        const dataJSON = await data.json();
+        for(let i = 0; i < dataJSON.length; i++)
+          if(dataJSON[i].imdbID === movie) return true;
+      }
+      else {
+        console.error('Error with data: ', data.statusText);
+        throw new Error(data.statusText);
+      }
+    } catch (error) { 
+      console.error('Error while fetching server: ', error);
+      setIsError(true);
+    } finally {
+      return false;
+    }
+  }
 
   const handleSaveMovie = async (event: any, movieJSONstrinfyed: string) => {
     setIsLoading(true);
+    if(await isMovieAlreadySaved(await JSON.parse(movieJSONstrinfyed))){ // Restrictive
+      setIsMovieAlreadySavedFound(true);
+      return;
+    }
     event.preventDefault(); // Prevents it from reloading the page
 
     try {
@@ -91,8 +116,24 @@ function MainPage() {
     )
   }
 
+  const AlreadySavedBackdrop = () => {
+    return(
+      <Backdrop open={isMovieAlreadySavedFound} onClick={(event: any) => {if (event.target === event.currentTarget) setIsMovieAlreadySavedFound(false)}}>
+        <Box backgroundColor="white" padding={2} borderRadius={8} display="flex" flexDirection="column" alignItems="center">
+          <Typography variant="h6" color="textPrimary" gutterBottom>
+            This movie is already saved in your library.</Typography>
+          <Box display="flex" justifyContent="center" marginTop={2}>
+            <Button variant="contained" color="primary" sx={{ marginRight: 2 }} onClick={() => setIsMovieAlreadySavedFound(false)}>
+              ok</Button>
+          </Box>
+        </Box>
+      </Backdrop>
+    )
+  }
+
   return (
     <div>
+      <AlreadySavedBackdrop />
       <br />
       <div id="searchInputBox">
         <Box display="flex" justifyContent="center" sx={{ marginTop: 8 }}>
