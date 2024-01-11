@@ -40,15 +40,17 @@ function MainPage() {
         const dataJSON = await data.json();
         console.log(movie);
         console.log(JSON.stringify(dataJSON));
-        for(let i = 0; i < dataJSON.length; i++)
-          if(dataJSON[i].imdbID === movie){
+        for(let i = 0; i < dataJSON.length; i++){
+          console.log(dataJSON[i]);
+          if(dataJSON[i].imdbID == movie){
             console.log("oi")
             return true;
           }
-      else {
+        }
+      } else {
         console.error('Error with data: ', data.statusText);
         throw new Error(data.statusText);
-      }}
+      }
     } catch (error) { 
       console.error('Error while fetching server: ', error);
       setIsError(true);
