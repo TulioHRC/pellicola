@@ -13,9 +13,7 @@ function LibraryPage() {
   const getSavedMovies = async () => {
     try {
       const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`);
-      if(data.ok) {
-        const data2 = await data.json();
-        setSavedMovies(data2);}
+      if(data.ok) setSavedMovies(await data.json());
       else console.error('Error with the data: ', data.statusText);
     } catch (error) { 
       console.error('Error while fetching server: ', error);
@@ -39,8 +37,6 @@ function LibraryPage() {
       else console.error('Error with data: ', data.statusText);
     } catch(error) {
       console.error('Error while fetching: ', error);
-      setIsLoading(false);
-      // await Error message
     } finally {
       getSavedMovies(); // Updates library
       setIsLoading(false);
@@ -52,7 +48,6 @@ function LibraryPage() {
     CSSnavBarButtonsSelect(false);
 
     getSavedMovies();
-    setIsLoading(false);
   }, []); // [] allows the useEffect to run only one time
 
   const GridCardsWatchedMovies = ({moviesWatchedData}: { moviesWatchedData: [{"imdbID": ""}]}) => {
