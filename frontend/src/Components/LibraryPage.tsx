@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Typography, IconButton, Box, Grid, Card, CardContent, Button, CardMedia } from '@mui/material'
+import { Typography, IconButton, Box, Grid, Card, CardContent, Button, CardMedia, Alert } from '@mui/material'
 import SearchOffIcon from '@mui/icons-material/SearchOff';
 import CSSnavBarButtonsSelect from '../utils/CSSfunctions';
 import LoadingScreen from './LoadingScreen';
@@ -8,15 +8,20 @@ import "../styles/Components/LibraryPage.css"
 
 function LibraryPage() {
   const [savedMovies, setSavedMovies] = useState([{"imdbID": ""}]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   const getSavedMovies = async () => {
     try {
       const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`);
       if(data.ok) setSavedMovies(await data.json());
-      else console.error('Error with the data: ', data.statusText);
+      else {
+        console.error('Error with data: ', data.statusText);
+        throw new Error(data.statusText);
+      }
     } catch (error) { 
       console.error('Error while fetching server: ', error);
+      setIsError(true);
     } finally {
       setIsLoading(false);
     }
@@ -34,9 +39,13 @@ function LibraryPage() {
       });
 
       if(data.ok) console.log('Watched Movie deleted!');
-      else console.error('Error with data: ', data.statusText);
+      else {
+        console.error('Error with data: ', data.statusText);
+        throw new Error(data.statusText);
+      }
     } catch(error) {
       console.error('Error while fetching: ', error);
+      setIsError(true);
     } finally {
       getSavedMovies(); // Updates library
       setIsLoading(false);
@@ -44,7 +53,6 @@ function LibraryPage() {
   } 
 
   useEffect(() => {
-    setIsLoading(true);
     CSSnavBarButtonsSelect(false);
 
     getSavedMovies();
@@ -83,7 +91,7 @@ function LibraryPage() {
   return (
     <div className='library'>
       {
-        isLoading ?
+        (isLoading) ?
         <LoadingScreen /> :
         <div>
           <br />
@@ -91,7 +99,7 @@ function LibraryPage() {
             <GridCardsWatchedMovies moviesWatchedData={savedMovies}/>
           </Box>
           {
-            (savedMovies[0].imdbID === "") && // In case it has no saved movie
+            (savedMovies[0].imdbID === "" && !isError) && // In case it has no saved movie
             <Box display="flex" justifyContent="center" >
               <IconButton color="primary" aria-label="search">
                 <SearchOffIcon />
@@ -102,6 +110,14 @@ function LibraryPage() {
             </Box>
           }
         </div>
+      }
+      {
+        isError &&
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="10vh">
+          <Alert severity='error' position="flex" justifyContent="center">
+            An error had occured! Try again later...
+          </Alert>
+        </Box>
       }
     </div>
   )

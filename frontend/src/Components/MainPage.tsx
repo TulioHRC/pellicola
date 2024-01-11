@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { TextField, Box, Grid, Card, CardContent, Typography, Button, CardMedia } from '@mui/material'
+import { TextField, Box, Grid, Card, CardContent, Typography, Button, CardMedia, Alert } from '@mui/material'
 import LoadingScreen from './LoadingScreen';
 import CSSnavBarButtonsSelect from '../utils/CSSfunctions';
 import "../styles/Components/MainPage.css"
@@ -9,6 +9,7 @@ function MainPage() {
   const [searchInput, setSearchInput] = useState('');
   const [movies, setMovies] = useState({"Search": []});
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const searchData = async (changedInputValue: string) => {
     setIsLoading(true);
@@ -19,9 +20,13 @@ function MainPage() {
       if(data.ok) {
         setMovies(await data.json());
       }
-      else console.error('Error with api data: ', data.statusText)
+      else {
+        console.error('Error with data: ', data.statusText);
+        throw new Error(data.statusText);
+      }
     } catch(error) {
       console.error('Error making fetch: ', error);
+      setIsError(true);
     } finally {
       setIsLoading(false);
     }
@@ -39,9 +44,13 @@ function MainPage() {
       })
 
       if(res.ok) console.log('Data sent!')
-      else console.error('Error while sending: ', res.statusText)
+      else {
+        console.error('Error with data sent: ', res.statusText);
+        throw new Error(res.statusText);
+      }
     } catch(error) { 
       console.error('Error while fetching: ', error)
+      setIsError(true);
     } finally {
       setSearchInput(""); // Resets the search input
       searchData("");
@@ -99,6 +108,14 @@ function MainPage() {
           <GridCardsMovies moviesData={movies}/>
         </div>
         
+      }
+      {
+        isError &&
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="30vh">
+          <Alert severity='error' position="flex" justifyContent="center">
+            An error had occured! Try again later...
+          </Alert>
+        </Box>
       }
     </div>
   );
