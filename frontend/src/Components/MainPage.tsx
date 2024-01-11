@@ -139,7 +139,7 @@ function MainPage() {
       <div id="searchInputBox">
         <Box display="flex" justifyContent="center" sx={{ marginTop: 8 }}>
           <TextField type="text" id="searchInput" value={searchInputText} onChange={(event: any) => searchAPIData(event.target.value)} variant="outlined" 
-            placeholder="Search..." sx={{width: "300px" }}/>
+            placeholder="Search..." autoComplete="off" sx={{width: "300px" }}/>
         </Box>
       </div>
       {
