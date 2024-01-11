@@ -3,9 +3,9 @@ import { config } from 'dotenv';
 import { AppModule } from './app.module';
 import * as cors from 'cors'
 
-config(); // ENV keys (like the database key)
+config(); // ENV keys
 
-const PORT = process.env.PORT || 3001 
+const PORT = process.env.PORT || 3001; 
 
 const corsOptions = {
     origin: process.env.FRONTEND_URL,
@@ -16,7 +16,7 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     app.use(cors(corsOptions));
     await app.listen(PORT);
-    console.log(`Listening on ${PORT}`)
+    console.log(`Listening on ${PORT}`);
 }
 
 bootstrap();
