@@ -7,7 +7,7 @@ import LoadingScreen from './LoadingScreen';
 
 function LibraryPage() {
   const [savedMovies, setSavedMovies] = useState([{"imdbID": ""}]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [confirmFormOpened, setConfirmFormOpened] = useState({"imdbID": ""});
   const [movieDeletedSnackBarActive, setMovieDeletedSnackBarActive] = useState(false);
