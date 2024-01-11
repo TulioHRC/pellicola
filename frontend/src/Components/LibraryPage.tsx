@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Typography, IconButton, Box, Grid, Card, CardContent, Button, CardMedia, Alert, Backdrop } from '@mui/material'
+import { Typography, IconButton, Box, Grid, Card, CardContent, Button, CardMedia, Backdrop } from '@mui/material'
 import SearchOffIcon from '@mui/icons-material/SearchOff';
 import CSSnavBarButtonsSelect from '../utils/CSSfunctions';
+import BasicSnackbar from './BasicSnackbar';
 import LoadingScreen from './LoadingScreen';
 import "../styles/Components/LibraryPage.css"
 
@@ -11,6 +12,7 @@ function LibraryPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [confirmFormOpened, setConfirmFormOpened] = useState({"imdbID": ""});
+  const [movieDeletedSnackBarActive, setMovieDeletedSnackBarActive] = useState(false);
 
   const getSavedMovies = async () => {
     try {
@@ -99,6 +101,8 @@ function LibraryPage() {
 
   return (
     <div className='library'>
+      <BasicSnackbar isVariable={movieDeletedSnackBarActive} severity="success" message="Movie deleted!" setIsVariable={setMovieDeletedSnackBarActive} />
+      <BasicSnackbar isVariable={isError} severity="error" message="An error had occured! Try again later..." setIsVariable={setIsError} />
       {
         (isLoading) ?
         <LoadingScreen /> :
@@ -119,14 +123,6 @@ function LibraryPage() {
             </Box>
           }
         </div>
-      }
-      {
-        isError &&
-        <Box display="flex" justifyContent="center" alignItems="center" minHeight="10vh">
-          <Alert severity='error' position="flex" justifyContent="center">
-            An error had occured! Try again later...
-          </Alert>
-        </Box>
       }
     </div>
   )

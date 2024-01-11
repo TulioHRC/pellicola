@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { TextField, Box, Grid, Card, CardContent, Typography, Button, CardMedia, Backdrop, Alert } from '@mui/material'
+import { TextField, Box, Grid, Card, CardContent, Typography, Button, CardMedia, Backdrop } from '@mui/material'
 import LoadingScreen from './LoadingScreen';
 import BasicSnackbar from './BasicSnackbar';
 import CSSnavBarButtonsSelect from '../utils/CSSfunctions';
@@ -41,10 +41,8 @@ function MainPage() {
       if(data.ok) {
         const dataJSON = await data.json();
         for(let i = 0; i < dataJSON.length; i++)
-          if(dataJSON[i].imdbID == movie.imdbID){
-            setIsMovieAlreadySavedFound(true);
+          if(dataJSON[i].imdbID == movie.imdbID) 
             return true;
-          }
       } else {
         console.error('Error with data: ', data.statusText);
         throw new Error(data.statusText);
@@ -52,9 +50,9 @@ function MainPage() {
     } catch (error) { 
       console.error('Error while fetching server: ', error);
       setIsError(true);
-      throw new Error("Movie already saved!");
     } 
     return false;
+    
   }
 
   const handleSaveMovie = async (event: any, movieJSONstrinfyed: string) => {
@@ -62,8 +60,10 @@ function MainPage() {
     event.preventDefault(); // Prevents it from reloading the page
 
     try {
-      await isMovieAlreadySaved(await JSON.parse(movieJSONstrinfyed)); // Restrictive
-
+      if(await isMovieAlreadySaved(await JSON.parse(movieJSONstrinfyed)) == true){ // Restrictive
+        setIsMovieAlreadySavedFound(true);
+        throw new Error("Movie already saved!");
+      }
       const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json'},
@@ -137,8 +137,7 @@ function MainPage() {
     <div>
       <AlreadySavedBackdrop />
       <BasicSnackbar isVariable={movieSavedSnackBarActive} severity="success" message="Movie saved!" setIsVariable={setMovieSavedSnackBarActive} />
-      <BasicSnackbar isVariable={isError} severity="error" message="An error had occured! Try again later..."
-        setIsVariable={setIsError} />
+      <BasicSnackbar isVariable={isError} severity="error" message="An error had occured! Try again later..." setIsVariable={setIsError} />
       
       <br />
       <div id="searchInputBox">
