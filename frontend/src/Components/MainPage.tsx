@@ -56,7 +56,7 @@ function MainPage() {
     try {
       const movie = await getMovieFromOmbdAPI(movieImdbID, `${process.env.REACT_APP_OMDb_API_KEY}`);
       console.log(movie);
-      if(movie.ok){
+      if(movie.imdbID == movieImdbID){
         const movieJSONstringfyed = await JSON.stringify(movie);
         console.log(movieJSONstringfyed);
         const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`, {

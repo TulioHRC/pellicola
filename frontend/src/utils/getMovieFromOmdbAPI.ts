@@ -1,7 +1,6 @@
 const getMovieFromOmbdAPI = async (imdbID: string, apikey: string) => {
     try {
         const data = await fetch(`https://www.omdbapi.com/?i=${imdbID}&plot=full&apikey=${apikey}`);
-        console.log(data)
         if(data.ok)
             return (await data.json());
         else{
