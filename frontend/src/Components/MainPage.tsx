@@ -57,9 +57,7 @@ function MainPage() {
       const movie = await getMovieFromOmbdAPI(movieImdbID, `${process.env.REACT_APP_OMDb_API_KEY}`);
       console.log(movie);
       if(movie.ok){
-        const movieJSON = await movie.json(); 
-        console.log(movieJSON);
-        const movieJSONstringfyed = await JSON.stringify(movieJSON);
+        const movieJSONstringfyed = await JSON.stringify(movie);
         console.log(movieJSONstringfyed);
         const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`, {
           method: 'POST',
@@ -88,8 +86,10 @@ function MainPage() {
 
     if(await isMovieAlreadySaved(await JSON.parse(movieJSONstrinfyed)) == true) // Restrictive
       setIsMovieAlreadySavedFound(true);
-    else
-      await saveMovie(movieJSONstrinfyed);
+    else {
+      const movieJSON = await JSON.parse(movieJSONstrinfyed);
+      await saveMovie(movieJSON.imdbID);
+    } 
 
     setSearchInputText(""); // Resets the search input
     searchAPIData("");
