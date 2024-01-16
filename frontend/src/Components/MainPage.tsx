@@ -3,6 +3,7 @@ import { TextField, Box, Grid, Card, CardContent, Typography, Button, CardMedia,
 import LoadingScreen from './LoadingScreen';
 import BasicSnackbar from './BasicSnackbar';
 import CSSnavBarButtonsSelect from '../utils/CSSfunctions';
+import getMovieFromOmbdAPI from '../utils/getMovieFromOmdbAPI';
 
 function MainPage() { 
   const [searchInputText, setSearchInputText] = useState('');
@@ -51,12 +52,13 @@ function MainPage() {
     return false;
   }
 
-  const saveMovie = async (movieJSONstrinfyed: string) => {
+  const saveMovie = async (movieImdbID: string) => {
     try {
+      const movieJSONstringfyed = (await JSON.stringify(getMovieFromOmbdAPI(movieImdbID, `${process.env.REACT_APP_OMDb_API_KEY}`)));
       const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json'},
-        body: movieJSONstrinfyed
+        body: movieJSONstringfyed
       })
 
       if(res.ok) setMovieSavedSnackBarActive(true);

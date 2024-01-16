@@ -15,7 +15,8 @@ function LibraryPage() {
   const getSavedMovies = async () => {
     try {
       const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`);
-      if(data.ok) setSavedMovies(await data.json());
+      const dataJSON = await data.json();
+      if(data.ok && dataJSON.length > 0) setSavedMovies(await data.json());
       else {
         console.error('Error with data: ', data.statusText);
         throw new Error(data.statusText);
@@ -68,7 +69,7 @@ function LibraryPage() {
     return (
       <Grid container spacing={3}>
         {
-          (moviesWatchedData[0].imdbID != "")  && // Prevents it from showing non-relevant data
+          (savedMovies[0].imdbID != "")  && // Prevents it from showing non-relevant data
             moviesWatchedData.map((movie: any) => (
             <Grid item key={movie.imdbID} xs={12} sm={6} md={4} lg={4}>
               <Card>

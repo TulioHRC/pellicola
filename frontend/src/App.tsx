@@ -18,7 +18,7 @@ function App() {
                     pellicola
                     </Typography>
                     <Button id="mainPageButton" color="inherit"  component={Link} to="/">Main Page</Button>
-                    <Button id="libraryPageButton" color="inherit" component={Link} to="/library">Library</Button>
+                    <Button  id="libraryPageButton" color="inherit" component={Link} to="/library">Library</Button>
                 </Toolbar>
             </AppBar>
         );
