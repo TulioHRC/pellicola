@@ -55,20 +55,29 @@ function MainPage() {
   const saveMovie = async (movieImdbID: string) => {
     try {
       const movie = await getMovieFromOmbdAPI(movieImdbID, `${process.env.REACT_APP_OMDb_API_KEY}`);
-      const movieJSON = await movie.json();
-      const movieJSONstringfyed = await JSON.stringify(movieJSON);
-      console.log(movieJSONstringfyed);
-      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json'},
-        body: movieJSONstringfyed
-      })
-
-      if(res.ok) setMovieSavedSnackBarActive(true);
-      else {
+      if(movie.ok){
+        const movieJSON = await movie.json(); 
+        console.log(movieJSON);
+        const movieJSONstringfyed = await JSON.stringify(movieJSON);
+        console.log(movieJSONstringfyed);
+        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json'},
+          body: movieJSONstringfyed
+        })
+  
+        if(res.ok) setMovieSavedSnackBarActive(true);
+        else {
         console.error('Error with data sent: ', res.statusText);
         throw new Error(res.statusText);
+        } 
+      } else {
+        console.error('Error with data sent: ', movie.statusText);
+        throw new Error(movie.statusText);
       }
+        
+      
+      
     } catch(error) { 
       console.error('Error while fetching: ', error)
       setIsError(true);
