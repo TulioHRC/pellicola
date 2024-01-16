@@ -54,10 +54,14 @@ function LibraryPage() {
     setIsLoading(true);
     event.preventDefault(); // Prevents it from reloading the page
 
-    await deleteMovie(movieJSONstrinfyed);
-    
-    await getSavedMovies(); // Updates library
-    setIsLoading(false);
+    await deleteMovie(movieJSONstrinfyed)
+      .then(async () => {
+        await getSavedMovies(); // Updates library
+      })
+      .then(() => {
+        setConfirmFormOpened({"imdbID": ""});
+        setIsLoading(false);
+      })
   } 
 
   useEffect(() => {
