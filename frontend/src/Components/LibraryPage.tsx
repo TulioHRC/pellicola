@@ -62,8 +62,10 @@ function LibraryPage() {
 
     if(deletedSuccess){
       await getSavedMovies(); // Updates library
+      console.log(savedMovies)
       setConfirmFormOpened({"imdbID": ""});
     }
+    console.log("aaa")
         
     setIsLoading(false);
   } 
