@@ -13,6 +13,20 @@ function MainPage() {
   const [isMovieAlreadySavedFound, setIsMovieAlreadySavedFound] = useState(false);
   const [movieSavedSnackBarActive, setMovieSavedSnackBarActive] = useState(false);
 
+  const getMoviesRating = async () => {
+    const moviesCopy = {...movies};
+    for(let index = 0; index < movies.Search.length; index++){
+      const movieCopyFullData = await getMovieFromOmbdAPI(movies.Search[index].imdbID, `${process.env.REACT_APP_OMDb_API_KEY}`);
+      // Real time searchs can be made, changing the movies to be found movies ratings
+      if(movieCopyFullData.imdbID === movies.Search[index].imdbID)
+        moviesCopy.Search[index].imdbRating = movieCopyFullData.imdbRating;
+      else
+        return;
+    }
+    console.log(moviesCopy);
+    setMovies(moviesCopy);
+  }
+
   const searchAPIData = async (changedInputTextValue: string) => {
     setIsLoading(true);
     setSearchInputText(changedInputTextValue);
@@ -30,6 +44,7 @@ function MainPage() {
       setIsError(true);
     } finally {
       setIsLoading(false);
+      getMoviesRating();
     }
   }
   
