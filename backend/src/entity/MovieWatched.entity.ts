@@ -18,6 +18,9 @@ export class MovieWatchedEntity{
     Type: string
 
     @Column()
+    imdbRating: string
+
+    @Column()
     Poster: string
 
     @Column({ nullable: true })

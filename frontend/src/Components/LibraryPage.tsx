@@ -15,7 +15,10 @@ function LibraryPage() {
   const getSavedMovies = async () => {
     try {
       const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`);
-      if(data.ok) setSavedMovies(await data.json());
+      const dataJSON = await data.json();
+      if(data.ok) {
+        if(dataJSON.length > 0) setSavedMovies(dataJSON);
+      }
       else {
         console.error('Error with data: ', data.statusText);
         throw new Error(data.statusText);
@@ -36,7 +39,11 @@ function LibraryPage() {
         body: movieJSONstrinfyed
       });
 
-      if(data.ok) setMovieDeletedSnackBarActive(true);
+      if(data.ok) {
+        setMovieDeletedSnackBarActive(true);
+        await data.json();
+        return true;
+      }
       else {
         console.error('Error with data: ', data.statusText);
         throw new Error(data.statusText);
@@ -44,6 +51,7 @@ function LibraryPage() {
     } catch(error) {
       console.error('Error while fetching: ', error);
       setIsError(true);
+      return false;
     }
   }
 
@@ -51,10 +59,12 @@ function LibraryPage() {
     setIsLoading(true);
     event.preventDefault(); // Prevents it from reloading the page
 
-    await deleteMovie(movieJSONstrinfyed);
-    
-    await getSavedMovies(); // Updates library
-    setIsLoading(false);
+    const deletedSuccess = await deleteMovie(movieJSONstrinfyed);
+
+    if(deletedSuccess){
+      await getSavedMovies(); // Updates library
+    }
+    setConfirmFormOpened({"imdbID": ""});
   } 
 
   useEffect(() => {
@@ -68,7 +78,7 @@ function LibraryPage() {
     return (
       <Grid container spacing={3}>
         {
-          (moviesWatchedData[0].imdbID != "")  && // Prevents it from showing non-relevant data
+          (savedMovies[0].imdbID != "")  && // Prevents it from showing non-relevant data
             moviesWatchedData.map((movie: any) => (
             <Grid item key={movie.imdbID} xs={12} sm={6} md={4} lg={4}>
               <Card>
