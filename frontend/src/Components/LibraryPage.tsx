@@ -41,6 +41,7 @@ function LibraryPage() {
 
       if(data.ok) {
         setMovieDeletedSnackBarActive(true);
+        await data.json();
         return true;
       }
       else {
