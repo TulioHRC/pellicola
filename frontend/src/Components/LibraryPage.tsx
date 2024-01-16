@@ -39,7 +39,10 @@ function LibraryPage() {
         body: movieJSONstrinfyed
       });
 
-      if(data.ok) setMovieDeletedSnackBarActive(true);
+      if(data.ok) {
+        setMovieDeletedSnackBarActive(true);
+        return true;
+      }
       else {
         console.error('Error with data: ', data.statusText);
         throw new Error(data.statusText);
@@ -47,6 +50,7 @@ function LibraryPage() {
     } catch(error) {
       console.error('Error while fetching: ', error);
       setIsError(true);
+      return false;
     }
   }
 
@@ -54,14 +58,14 @@ function LibraryPage() {
     setIsLoading(true);
     event.preventDefault(); // Prevents it from reloading the page
 
-    await deleteMovie(movieJSONstrinfyed)
-      .then(async () => {
-        await getSavedMovies(); // Updates library
-      })
-      .then(() => {
-        setConfirmFormOpened({"imdbID": ""});
-        setIsLoading(false);
-      })
+    const deletedSuccess = await deleteMovie(movieJSONstrinfyed);
+
+    if(deletedSuccess){
+      await getSavedMovies(); // Updates library
+      setConfirmFormOpened({"imdbID": ""});
+    }
+        
+    setIsLoading(false);
   } 
 
   useEffect(() => {
