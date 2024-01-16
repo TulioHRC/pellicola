@@ -16,7 +16,9 @@ function LibraryPage() {
     try {
       const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`);
       const dataJSON = await data.json();
-      if(data.ok && dataJSON.length > 0) setSavedMovies(await data.json());
+      if(data.ok) {
+        if(dataJSON.length > 0) setSavedMovies(await data.json());
+      }
       else {
         console.error('Error with data: ', data.statusText);
         throw new Error(data.statusText);
