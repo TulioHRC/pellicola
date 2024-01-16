@@ -54,7 +54,9 @@ function MainPage() {
 
   const saveMovie = async (movieImdbID: string) => {
     try {
-      const movieJSONstringfyed = (await JSON.stringify(getMovieFromOmbdAPI(movieImdbID, `${process.env.REACT_APP_OMDb_API_KEY}`)));
+      const movie = await getMovieFromOmbdAPI(movieImdbID, `${process.env.REACT_APP_OMDb_API_KEY}`);
+      const movieJSON = await movie.json();
+      const movieJSONstringfyed = await JSON.stringify(movieJSON);
       console.log(movieJSONstringfyed);
       const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api`, {
         method: 'POST',
