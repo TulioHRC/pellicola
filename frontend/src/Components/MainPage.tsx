@@ -55,6 +55,7 @@ function MainPage() {
   const saveMovie = async (movieImdbID: string) => {
     try {
       const movie = await getMovieFromOmbdAPI(movieImdbID, `${process.env.REACT_APP_OMDb_API_KEY}`);
+      console.log(movie);
       if(movie.ok){
         const movieJSON = await movie.json(); 
         console.log(movieJSON);
@@ -75,9 +76,6 @@ function MainPage() {
         console.error('Error with data sent: ', movie.statusText);
         throw new Error(movie.statusText);
       }
-        
-      
-      
     } catch(error) { 
       console.error('Error while fetching: ', error)
       setIsError(true);
