@@ -14,7 +14,10 @@ function MainPage() {
   const [movieSavedSnackBarActive, setMovieSavedSnackBarActive] = useState(false);
 
   const getMoviesRating = async () => {
+    console.log(movies);
+    
     const moviesCopy = {...movies};
+    console.log(moviesCopy);
     for(let index = 0; index < movies.Search.length; index++){
       const movieCopyFullData = await getMovieFromOmbdAPI(movies.Search[index].imdbID, `${process.env.REACT_APP_OMDb_API_KEY}`);
       // Real time searchs can be made, changing the movies to be found movies ratings
