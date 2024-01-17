@@ -8,7 +8,7 @@ config(); // ENV keys
 const PORT = process.env.PORT || 3001; 
 
 const corsOptions = {
-    origin: "*",//process.env.FRONTEND_URL,
+    origin: process.env.FRONTEND_URL,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE'
 }
 

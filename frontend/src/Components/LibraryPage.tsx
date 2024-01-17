@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Typography, IconButton, Box, Grid, Card, CardContent, Button, CardMedia, Backdrop } from '@mui/material'
+import { Typography, IconButton, Box, Grid, Card, CardContent, Button, CardMedia, Backdrop, CircularProgress } from '@mui/material'
 import SearchOffIcon from '@mui/icons-material/SearchOff';
 import CSSnavBarButtonsSelect from '../utils/CSSfunctions';
 import BasicSnackbar from './BasicSnackbar';
 import LoadingScreen from './LoadingScreen';
+import StarRating from './StarRating';
 
 function LibraryPage() {
   const [savedMovies, setSavedMovies] = useState([{"imdbID": ""}]);
@@ -86,6 +87,11 @@ function LibraryPage() {
                   <CardMedia component="img" height="340" image={movie.Poster} alt={movie.Title}/>
                   <Typography variant="h5">{movie.Title}</Typography>
                   <Typography variant="subtitle1">{movie.Year}</Typography>
+
+                  <StarRating rating={movie.imdbRating} /> 
+                  <Typography variant="h5" noWrap>
+                    {movie.imdbRating ?? (<CircularProgress />)}/10.0
+                  </Typography>
                   
                   <Button variant="outlined" color="primary" onClick={() => {setConfirmFormOpened({"imdbID": movie.imdbID})}} sx={{color: "red", borderColor: "red"}}>
                     Delete Watched Movie

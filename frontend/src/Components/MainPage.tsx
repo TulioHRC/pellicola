@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { TextField, Box, Grid, Card, CardContent, Typography, Button, CardMedia, Backdrop } from '@mui/material'
+import React, { useEffect, useState, useRef } from 'react'
+import { TextField, Box, Grid, Card, CardContent, Typography, Button, CardMedia, Backdrop, CircularProgress } from '@mui/material'
 import LoadingScreen from './LoadingScreen';
 import BasicSnackbar from './BasicSnackbar';
+import StarRating from './StarRating';
 import CSSnavBarButtonsSelect from '../utils/CSSfunctions';
 import getMovieFromOmbdAPI from '../utils/getMovieFromOmdbAPI';
 
@@ -12,6 +13,23 @@ function MainPage() {
   const [isError, setIsError] = useState(false);
   const [isMovieAlreadySavedFound, setIsMovieAlreadySavedFound] = useState(false);
   const [movieSavedSnackBarActive, setMovieSavedSnackBarActive] = useState(false);
+  const [timeoutGetRatings, setTimeoutGetRatings] = useState()
+
+  const moviesRef = useRef(movies); // Updated data (current value)
+  const searchInputTextRef = useRef(searchInputText);
+
+  const getMoviesRating = async (timeoutInputText: string) => {
+    const moviesCopy = {...moviesRef.current};
+    try{
+      for(let index = 0; index < moviesRef.current.Search.length; index++){
+        const movieCopyFullData = await getMovieFromOmbdAPI(moviesRef.current.Search[index].imdbID, `${process.env.REACT_APP_OMDb_API_KEY}`);
+        // Real time searchs can be made, changing the movies to be found movies ratings
+        if(searchInputTextRef.current != timeoutInputText) throw new Error("User input changed");
+        moviesCopy.Search[index].imdbRating = movieCopyFullData.imdbRating;      
+      }
+      setMovies(moviesCopy);
+    } catch(error) {}
+  }
 
   const searchAPIData = async (changedInputTextValue: string) => {
     setIsLoading(true);
@@ -19,8 +37,10 @@ function MainPage() {
 
     try {
       const data = await fetch(`https://www.omdbapi.com/?s=${changedInputTextValue}&apikey=${process.env.REACT_APP_OMDb_API_KEY}`);
-      if(data.ok)
-        setMovies(await data.json());
+      if(data.ok){
+        const dataJSON = await data.json();
+        await setMovies(dataJSON);
+      }
       else {
         console.error('Error with data: ', data.statusText);
         throw new Error(data.statusText);
@@ -29,6 +49,9 @@ function MainPage() {
       console.error('Error while fetching: ', error);
       setIsError(true);
     } finally {
+      timeoutGetRatings && clearTimeout(timeoutGetRatings);
+      setTimeoutGetRatings();
+      setTimeoutGetRatings(setTimeout(getMoviesRating, 1000, changedInputTextValue));
       setIsLoading(false);
     }
   }
@@ -96,7 +119,9 @@ function MainPage() {
 
   useEffect(() => {
     CSSnavBarButtonsSelect(true);
-  })
+    moviesRef.current = movies;
+    searchInputTextRef.current = searchInputText;
+  }, [movies, searchInputText])
 
   const AlreadySavedBackdrop = () => {
     return(
@@ -119,13 +144,17 @@ function MainPage() {
     return (
       <Grid container spacing={3}>
         {moviesData.Search &&
-          moviesData.Search.map((movie: { imdbID: string; Title: string; Year: string, Poster: string }) => (
+          moviesData.Search.map((movie: { imdbID: string; Title: string; Year: string, Poster: string , imdbRating: string}) => (
             <Grid item key={movie.imdbID} xs={12} sm={6} md={4} lg={4}>
               <Card>
                 <CardContent>
                   <CardMedia component="img" height="340" image={movie.Poster} alt={movie.Title}/>
                   <Typography variant="h5">{movie.Title}</Typography>
                   <Typography variant="subtitle1">{movie.Year}</Typography>
+                  <StarRating rating={movie.imdbRating} /> 
+                  <Typography variant="h5" noWrap>
+                    {movie.imdbRating ?? (<CircularProgress />)}/10.0
+                  </Typography>
                   <form onSubmit={(event: any) => handleSaveMovie(event, JSON.stringify(movie))}>
                     <Button type="submit" variant="outlined" color="primary">
                       Save to library
